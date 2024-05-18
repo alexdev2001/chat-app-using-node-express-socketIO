@@ -1,0 +1,15 @@
+doctype html 
+html 
+    head 
+        title="chat app"
+        script(src='/public/chat.js')
+        script(src='/socket.io/socket.io.js')
+    body 
+        #content(style="width: 500px; Height: 300px; margin: 0 0 20px 0; border: solid 1px #999; overflow-y: scroll;")
+        .controls 
+            | Name: 
+            input#name(style='width:350px;')
+            br
+            | Message: 
+            input#field(style='width:3350px;')
+            input#send(type='button', value='send')
