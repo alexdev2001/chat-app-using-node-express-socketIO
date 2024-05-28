@@ -6,7 +6,7 @@ window.onload = function() {
     var field = document.getElementById('field');
     var sendButton = document.getElementById('send');
     var content = document.getElementById('content');
-    var name = document.getElementById('name');
+    var nameInput = document.getElementById('name');
 
     // message listener
     socket.on('message', (data) => {
@@ -28,7 +28,8 @@ window.onload = function() {
     // btton to send message to socket
     sendButton.onclick = () => {
         const text = field.value;
-        const name = name.value;
+       
+        
 
         // Debugging: Log input values before sending
         console.log(`Name entered: "${name}"`);
