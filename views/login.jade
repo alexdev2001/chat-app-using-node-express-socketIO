@@ -1,0 +1,20 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title Chat App Login
+    script(src='/public/script.js')
+    
+
+  body
+    .container
+      h1 Welcome to Chat App
+      form#loginForm(action="/login", method="POST")
+        label(for="username") Username:
+        input(type="text", id="username", name="username", required)
+        br
+        label(for="password") Password:
+        input(type="password", id="password", name="password", required)
+        br
+        input(type="submit", value="Login")

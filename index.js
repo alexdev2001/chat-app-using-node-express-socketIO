@@ -6,8 +6,10 @@ var server = http.createServer(app);
 const bodyParser = require('body-parser');
 const { createUser, getUserById, updateUserPassword, deleteUserById } = require('./controllers/userController');
 const { Sequelize } = require('sequelize');
-const  User = require('./models/user')
-const sequelize = require('./models/index');
+const  User = require('./models/user');
+const session = require('express-session');
+const bcrypt = require('bcrypt');
+
 
 var io = require('socket.io')(server);
 
@@ -19,11 +21,50 @@ app.engine('jade', require('jade').__express);
 
 // Route for the main page
 app.get('/', (req, res) => {
-    res.render('page');
+    res.render('login');
 });
 
 app.use(bodyParser.json());
 
+app.use(session({
+    secret: 'secret_key',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false}
+}));
+
+app.post('/login', async (req, res) => {
+    const { username, password } = req.body;
+
+    try {
+        const user = await User.findOne({ where: { username }});
+
+        if (!user) {
+            return res.status(401).json({ error: 'Invalid username or password'});
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+
+        if (!isPasswordValid) {
+            return res.status(401).json({ error: 'Invalid username or password'});
+        }
+
+        req.session.user = { id: user.id, username: user.username };
+
+        res.status(200).json({ message: 'Login successful'});
+    } catch (error) {
+        console.error('Login error: ', error);
+        res.status(500).json({ error: 'An error occured. Please try again.'});
+    }
+});
+
+app.get('/chat', (req, res) => {
+    if (!req.session.user) {
+        return res.redirect('/');
+    }
+
+    res.render('page', { username: req.session.user.username });
+})
 
 app.post('/users/add', async (req, res) => {
     try {
