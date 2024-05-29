@@ -17,14 +17,6 @@ const User = require('../models/user');
 const getUserById = async (id) => {
     try {
         const user = await User.findByPk(id);
-        if (user) {
-            const salt = await bcrypt.genSalt(10);
-            user.password = await bcrypt.hash(newPassword, salt);
-            await user.save();
-            return user;
-        } else {
-            throw new Error('user is not found');
-        }
     } catch (error) {
         throw error;
     }

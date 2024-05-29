@@ -8,6 +8,8 @@ window.onload = function() {
     var content = document.getElementById('content');
     var nameInput = document.getElementById('name');
 
+    console.log('Welcome user');
+
     // message listener
     socket.on('message', (data) => {
         if(data.message) {
